@@ -11,13 +11,12 @@ block content
         p Please first login to the app in order to load work hours.
   else
     .row
-      .col-md-6
-        h2 Load Workhours for this month.
-        p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+      .col-md-12
+        h2 Welcome!
+        p Please select an option:
         p
-          a.btn.btn-raised(href='#', role='button') View details »
-      .col-md-6
-        h2 List Workloads
-        p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+          a.btn.btn-raised(href='/loadworks', role='button') Load Work »
         p
-          a.btn.btn-raised(href='/workloads', role='button') View details »
+          a.btn.btn-raised(href='/workloads', role='button') List Workloads »
+        p
+          a.btn.btn-raised(href='/workloads', role='button') Show Catalogs »

@@ -33,6 +33,7 @@ const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const workloadController = require('./controllers/workload');
+const loadworkController = require('./controllers/loadwork');
 
 /**
  * API keys and Passport configuration.
@@ -146,7 +147,9 @@ app.post('/account/delete', passportConfig.isAuthenticated, userController.postD
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 ///CUSTOMIZED ROUTES
 app.route('/workloads')
-  .get(workloadController.getWorkloads)
+  .get(workloadController.getWorkloads,  passportConfig.isAuthenticated)
+app.route('/loadworks')
+  .get(loadworkController.getLoadworks)
 
 /**
  * API examples routes.
