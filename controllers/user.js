@@ -186,9 +186,8 @@ exports.postUpdateProfile = (req, res, next) => {
     if (user.email !== req.body.email) user.emailVerified = false;
     user.email = req.body.email || '';
     user.profile.name = req.body.name || '';
-    user.profile.gender = req.body.gender || '';
-    user.profile.location = req.body.location || '';
-    user.profile.website = req.body.website || '';
+    user.profile.tgi = req.body.tgi || '';
+    user.profile.area = req.body.area || '';
     user.save((err) => {
       if (err) {
         if (err.code === 11000) {
