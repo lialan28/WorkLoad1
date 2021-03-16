@@ -147,9 +147,10 @@ app.post('/account/delete', passportConfig.isAuthenticated, userController.postD
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
 ///CUSTOMIZED ROUTES
 app.route('/workloads')
-  .get(workloadController.getWorkloads,  passportConfig.isAuthenticated)
+  .get(workloadController.getWorkloads,  passportConfig.isAuthenticated);
 app.route('/loadworks')
-  .get(loadworkController.getLoadworks)
+  .get( passportConfig.isAuthenticated, loadworkController.getLoadworks);
+
 
 /**
  * API examples routes.
@@ -268,3 +269,4 @@ app.listen(app.get('port'), () => {
 });
 
 module.exports = app;
+
