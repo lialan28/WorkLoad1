@@ -65,11 +65,12 @@ exports.getLogin = (req, res) => {
 
 /**
  * POST /login
- * Sign in using email and password.
+ * Sign in using email, name, tgi, area and password.
  */
 exports.postLogin = (req, res, next) => {
   const validationErrors = [];
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
+
   if (validator.isEmpty(req.body.password)) validationErrors.push({ msg: 'Password cannot be blank.' });
 
   if (validationErrors.length) {
@@ -125,6 +126,13 @@ exports.getSignup = (req, res) => {
 exports.postSignup = (req, res, next) => {
   const validationErrors = [];
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
+
+  if (validator.isEmpty(req.body.name)) validationErrors.push({ msg: 'Please enter full name.' });
+
+  if (!validator.isLength(req.body.tgi, 8)) validationErrors.push({ msg: 'TGI must be 8 characters long' });
+
+  if (validator.isEmpty(req.body.area)) validationErrors.push({ msg: 'Please enter Area.' });
+
   if (!validator.isLength(req.body.password, { min: 8 })) validationErrors.push({ msg: 'Password must be at least 8 characters long' });
   if (req.body.password !== req.body.confirmPassword) validationErrors.push({ msg: 'Passwords do not match' });
 
@@ -136,7 +144,12 @@ exports.postSignup = (req, res, next) => {
 
   const user = new User({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    profile: {
+      name: req.body.name,
+      tgi: req.body.tgi,
+      area: req.body.area
+    } 
   });
 
   User.findOne({ email: req.body.email }, (err, existingUser) => {

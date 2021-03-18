@@ -34,6 +34,9 @@ const apiController = require('./controllers/api');
 const contactController = require('./controllers/contact');
 const workloadController = require('./controllers/workload');
 const loadworkController = require('./controllers/loadwork');
+// Catalogs
+const catalogController = require('./controllers/catalog')
+const projectController = require('./controllers/project');
 
 /**
  * API keys and Passport configuration.
@@ -149,8 +152,11 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 app.route('/workloads')
   .get(workloadController.getWorkloads,  passportConfig.isAuthenticated);
 app.route('/loadworks')
-  .get( passportConfig.isAuthenticated, loadworkController.getLoadworks);
-
+  .get(passportConfig.isAuthenticated, loadworkController.getLoadworks);
+app.route('/catalogs')
+  .get(passportConfig.isAuthenticated, catalogController.getCatalogs);
+app.route('/project')
+  .get( passportConfig.isAuthenticated, projectController.getProjects);
 
 /**
  * API examples routes.

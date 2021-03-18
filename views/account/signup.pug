@@ -10,6 +10,28 @@ block content
       .col-md-7
         input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus, autocomplete='email', required)
     .form-group.row
+      label.col-md-3.col-form-label.font-weight-bold.text-right(for='name') Name
+      .col-md-7
+        input.form-control(type='name', name='name', id='email', placeholder='name', autofocus, autocomplete='name', required)
+    .form-group.row
+      label.col-md-3.col-form-label.font-weight-bold.text-right(for='tgi') TGI
+      .col-md-7
+        input.form-control(type='tgi', name='tgi', id='tgi', placeholder='tgi', autofocus, autocomplete='tgi', required)
+
+    .form-group.row
+      label.col-md-3.col-form-label.font-weight-bold.text-right(for='area') Area
+      .dropdown
+        button.btn.btn-default.dropdown-toggle(type="button",data-toggle="dropdown") Seleccione 
+          ul.dropdown-menu(role="menu",aria-labelledby="dropdownArea")
+              a.dropdown-item() SE
+              div.dropdown-divider
+              a.dropdown-item() IVVQ
+              div.dropdown-divider
+              a.dropdown-item() DEV
+              div.dropdown-divider
+              a.dropdown-item() ATM
+
+    .form-group.row
       label.col-md-3.col-form-label.font-weight-bold.text-right(for='password') Password
       .col-md-7
         input.form-control(type='password', name='password', id='password', placeholder='Password', autocomplete='new-password', minlength='8', required)

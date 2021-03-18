@@ -1,0 +1,76 @@
+extends ../layout
+
+block content
+  .page-header
+    h3 📝 Catalogs
+  br
+  br  
+  .container
+    #accordion
+      .card
+        .card-header
+          a.card-link(data-toggle='collapse', href='#collapseOne')
+            | Projects
+        #collapseOne.collapse.show(data-parent='#accordion')
+          .card-body
+            .container
+              each val in projects.length ? projects : ['There are no projects']
+                .row
+                  .col-10
+                    p=val.name
+                  .col-1
+                    a.btn.btn-secondary.btn-sm(href='/', role='button') Update
+                  .col-1
+                    a.btn.btn-danger.btn-sm(href='/', role='button') Delete
+      .card
+        .card-header
+          a.collapsed.card-link(data-toggle='collapse', href='#collapseTwo')
+            | Costcenters
+        #collapseTwo.collapse(data-parent='#accordion')
+          .card-body
+            .container
+              each val in costcenters.length ? costcenters : ['There are no costcenters']
+                .row
+                  .col-10
+                    p=val.name
+                  .col-1
+                    a.btn.btn-secondary.btn-sm(href='/', role='button') Update
+                  .col-1
+                    a.btn.btn-danger.btn-sm(href='/', role='button') Delete
+      .card
+        .card-header
+          a.collapsed.card-link(data-toggle='collapse', href='#collapseThree')
+            | Managers
+        #collapseThree.collapse(data-parent='#accordion')
+          .card-body
+            .container
+              each val in managers.length ? managers : ['There are no managers']
+                .row
+                  .col-10
+                    p=val.name
+                  .col-1
+                    a.btn.btn-secondary.btn-sm(href='/', role='button') Update
+                  .col-1
+                    a.btn.btn-danger.btn-sm(href='/', role='button') Delete
+      .card
+        .card-header
+          a.collapsed.card-link(data-toggle='collapse', href='#collapseFour')
+            | Areas
+        #collapseFour.collapse(data-parent='#accordion')
+          .card-body
+            .container
+              each val in areas.length ? areas : ['There are no areass']
+                .row
+                  .col-5
+                    p=val.name
+                  .col-5
+                    p=val.manager
+                  .col-1
+                    a.btn.btn-secondary.btn-sm(href='/', role='button') Update
+                  .col-1
+                    a.btn.btn-danger.btn-sm(href='/', role='button') Delete
+              
+
+
+
+    
