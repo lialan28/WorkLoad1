@@ -38,4 +38,3 @@ exports.getCatalogs = async (req, res) => {
     areas: allAreas
   });
 };
-

@@ -5,24 +5,75 @@ block content
   br
   p.lead In order to load hours, please select the month and proceed to add the tasks per day. Remember that you need to register at least 8 hours per day
   hr
-
   .container
-    #calendar(style='height:800px;')
+    .row 
+      .col-md-8
+        .container
+          #calendar(style='height:600px;')
+        script(src='/bundles/tuicalendar/tui-code-snippet.min.js')
+        script(src='/bundles/tuicalendar/tui-date-picker.min.js')
+        script(src='/bundles/tuicalendar/tui-time-picker.min.js')
+        script(src='/bundles/tuicalendar/tui-calendar.js')
+        script.
+          let Calendar = tui.Calendar;
 
-  script(src='/bundles/tuicalendar/tui-code-snippet.min.js')
-  script(src='/bundles/tuicalendar/tui-date-picker.min.js')
-  script(src='/bundles/tuicalendar/tui-time-picker.min.js')
-  script(src='/bundles/tuicalendar/tui-calendar.js')
-  script.
-    let Calendar = tui.Calendar;
-
-    var calendar = new Calendar('#calendar', {
-      defaultView: 'month',
-      taskView: true,
-      template: {
-        monthDayname: function(dayname) {
-          return '<span class="calendar-week-dayname-name">' + dayname.label + '</span>';
-        }
-      }
-    });
-    
+          var calendar = new Calendar('#calendar', {
+            defaultView: 'month',
+            taskView: true,
+            template: {
+              monthDayname: function(dayname) {
+                return '<span class="calendar-week-dayname-name">' + dayname.label + '</span>';
+              }
+            }
+          });
+      .col-md-4
+        .table-bordered
+          br
+          .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='date') Date
+            .col-md-7
+              input.form-control(type='date', name='date', id='date', placeholder='date', autofocus, autocomplete='date', required)
+          .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='activity') Activity
+            .col-md-7
+              select#sel1.form-control(style=' height:40px;', ' width:20px;') 
+                  option(selected='') Seleccione
+                  option(value='1') uno
+                  option(value='2') dos
+                  option(value='3') tres
+          .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='detail') Detail
+            .col-md-7
+              select#sel1.form-control(style=' height:40px;', ' width:20px;') 
+                  option(selected='') Seleccione
+                  option(value='1') uno
+                  option(value='2') dos
+                  option(value='3') tres  
+          .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='CC') CC
+            .col-md-7
+              input.form-control(type='cc', name='cc', id='cc', placeholder='cc', autofocus, autocomplete='cc', required)
+          .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='hours') Hours
+            .col-md-7
+              select#sel1.form-control(style=' height:40px;', ' width:20px;') 
+                  option(selected='') Seleccione
+                  option(value='1') 01:00
+                  option(value='1.5') 01:30
+                  option(value='2') 02:00  
+                  option(value='2.5') 02:30
+                  option(value='3') 03:00  
+                  option(value='3.5') 03:30
+                  option(value='4') 04:00  
+                  option(value='4.5') 04:30
+                  option(value='5') 05:00  
+                  option(value='5.5') 05:30
+                  option(value='6') 06:00  
+                  option(value='6.5') 06:30
+                  option(value='7') 07:00   
+                  option(value='7.5') 07:30
+                  option(value='8') 08:00         
+          .form-group.row
+            label.col-md-3.col-form-label.font-weight-bold.text-right(for='description') Description
+            .col-md-7
+              textarea#description(name='description' rows='4' cols='23')
