@@ -3,304 +3,208 @@ extends layout
 block content
   h1 📅 Load Work Hours
   br
-  p.lead In order to load hours, please select the month and proceed to add the tasks per day. Remember that you need to register at least 8 hours per day
+  .form-group.row
+    .col-md-10
+      p Please select the day and choose the appropiate task. 8 hours shall be registered. When finishing clic the send month button.
+    .col-md-2
+      input.btn.btn-raised(type='submit' value='Send month')
   hr
-  .container
-    .row 
-      .col-md-8
-        .container
-          #calendar(style='height:600px;')
-        script(src='/bundles/tuicalendar/tui-code-snippet.min.js')
-        script(src='/bundles/tuicalendar/tui-date-picker.min.js')
-        script(src='/bundles/tuicalendar/tui-time-picker.min.js')
-        script(src='/bundles/tuicalendar/tui-calendar.js')
-        script(src='/js/lib/moment.js')
-        script.
-          let Calendar = tui.Calendar;
+  form(action='submit')
+      #calendar(style='height:600px;')
+      //- modal
+      mixin activitypopup(title,id)
+        .modal.fade(id=id,tabindex="-1",role="dialog",aria-labelledby=id+"Label" aria-hidden="true")
+          .modal-dialog
+            .modal-content
+              .modal-header
+                h4.modal-title(id=id+"Label")= title
+                button.close(type="button",data-dismiss="modal")
+                  span(aria-hidden="true") &times;
+                  span.sr-only Close
+              .modal-body
+                .form-group.row
+                  label.col-md-3.col-form-label.font-weight-bold.text-right(for='date') Date
+                  .col-md-7
+                    #loadWorkModalDate
+                .form-group.row
+                  label.col-md-3.col-form-label.font-weight-bold.text-right(for='activity') Activity
+                  .col-md-7
+                    select#selActivity.form-control(style=' height:40px;', ' width:20px;', required) 
+                        option(selected='') Seleccione
+                        option(value='1') Proyecto
+                        option(value='2') Producto
+                        option(value='3') Desarrollo de Negocios
+                        option(value='4') Thales 
+                        option(value='5') Incidencia 
+                .form-group.row
+                  label.col-md-3.col-form-label.font-weight-bold.text-right(for='detail') Detail
+                  .col-md-7
+                    select#selDetail.form-control(style=' height:40px;', ' width:20px;', required) 
+                        option(selected='') Seleccione
+                        option(value='1') AIFA
+                        option(value='2') SDP 
+                        option(value='3') Tren Maya 
+                        option(value='4') Vacaciones 
+                        option(value='5') RH/VP Meeting 
+                .form-group.row
+                  label.col-md-3.col-form-label.font-weight-bold.text-right(for='CC') CC
+                  .col-md-7
+                    input.form-control(type='cc', name='cc', id='cc', placeholder='cc', autofocus, autocomplete='cc', disabled='')
+                .form-group.row
+                  label.col-md-3.col-form-label.font-weight-bold.text-right(for='hours') From 
+                  .col-md-3
+                    select#selFromHour.form-control(style=' height:40px;', required) 
+                        option(selected='') Seleccione
+                        option(value='1') 09:00
+                        option(value='2') 09:30
+                        option(value='3') 10:00  
+                        option(value='4') 10:30
+                        option(value='5') 11:00  
+                        option(value='6') 11:30
+                        option(value='7') 12:00  
+                        option(value='8') 12:30
+                        option(value='9') 13:00  
+                        option(value='10') 13:30
+                        option(value='11') 14:00  
+                        option(value='12') 14:30
+                        option(value='13') 15:00   
+                        option(value='14') 15:30
+                        option(value='15') 16:00 
+                        option(value='16') 16:30   
+                        option(value='17') 17:00
+                        option(value='18') 17:30 
+                  label.col-md-1.col-form-label.font-weight-bold.text-right(for='hours') to
+                  .col-md-3
+                    select#selToHour.form-control(style=' height:40px;',  required) 
+                        option(selected='') Seleccione
+                        option(value='1') 09:30
+                        option(value='2') 10:00  
+                        option(value='3') 10:30
+                        option(value='4') 11:00  
+                        option(value='5') 11:30
+                        option(value='6') 12:00  
+                        option(value='7') 12:30
+                        option(value='8') 13:00  
+                        option(value='9') 13:30
+                        option(value='10') 14:00  
+                        option(value='11') 14:30
+                        option(value='12') 15:00   
+                        option(value='13') 15:30
+                        option(value='14') 16:00    
+                        option(value='15') 16:30   
+                        option(value='16') 17:00
+                        option(value='17') 17:30 
+                        option(value='18') 18:00  
+                .form-group.row
+                  label.col-md-3.col-form-label.font-weight-bold.text-right(for='commercial') Commercial
+                  .col-md-7
+                    input.form-control(type='commercial', name='commercial', id='commercial', placeholder='Commercial Name', autofocus, autocomplete='commercial ')  
+                .form-group.row
+                  label.col-md-3.col-form-label.font-weight-bold.text-right(for='description') Description
+                  .col-md-7
+                    textarea#description(name='description' rows='4' cols='34', required)
+              .modal-footer
+                button.btn.btn-default(type="button",data-dismiss="modal", onclick="processLoadwork()") Submit
+                button.btn.btn-default(type="button",data-dismiss="modal") Close
+      +activitypopup('Activity WorkLoad', 'loadWorkModal')
+      script(src='/bundles/tuicalendar/tui-code-snippet.min.js')
+      script(src='/bundles/tuicalendar/tui-date-picker.min.js')
+      script(src='/bundles/tuicalendar/tui-time-picker.min.js')
+      script(src='/bundles/tuicalendar/tui-calendar.js')
+      script(src='/js/lib/moment.min.js')
+      
+      script.
+        ////////////////////////////////////////////////////////////////////////////////////////////// GLOBAL VARIABLES
+        let Calendar = tui.Calendar;
 
-
-          var calendar = new Calendar('#calendar', {
-           
-            // 'day', 'week', 'month'
+        ////////////////////////////////////////////////////////////////////////////////////////////// CALENDAR OBJECT INSTANCE
+        var cal = new tui.Calendar('#calendar', {
             defaultView: 'month',
-
-            // shows the milestone and task in weekly, daily view
-            taskView: true,
-
-            // shows the all day and time grid in weekly, daily view
-            scheduleView: true,
-
-            // override default styles here
-            theme: {
-              'common.border': '1px solid #e5e5e5',
-              'common.backgroundColor': 'white',
-              'common.holiday.color': '#ff4040',
-              'common.saturday.color': '#333',
-              'common.dayname.color': '#333',
-              'common.today.color': '#333',
-
-              // creation guide style
-              'common.creationGuide.backgroundColor': 'rgba(81, 92, 230, 0.05)',
-              'common.creationGuide.border': '1px solid #515ce6',
-
-              // month header 'dayname'
-              'month.dayname.height': '31px',
-              'month.dayname.borderLeft': '1px solid #e5e5e5',
-              'month.dayname.paddingLeft': '10px',
-              'month.dayname.paddingRight': '10px',
-              'month.dayname.backgroundColor': 'inherit',
-              'month.dayname.fontSize': '12px',
-              'month.dayname.fontWeight': 'normal',
-              'month.dayname.textAlign': 'left',
-
-              // month day grid cell 'day'
-              'month.holidayExceptThisMonth.color': 'rgba(255, 64, 64, 0.4)',
-              'month.dayExceptThisMonth.color': 'rgba(51, 51, 51, 0.4)',
-              'month.weekend.backgroundColor': 'inherit',
-              'month.day.fontSize': '14px',
-
-              // month schedule style
-              'month.schedule.borderRadius': '2px',
-              'month.schedule.height': '24px',
-              'month.schedule.marginTop': '2px',
-              'month.schedule.marginLeft': '8px',
-              'month.schedule.marginRight': '8px',
-
-              // month more view
-              'month.moreView.border': '1px solid #d5d5d5',
-              'month.moreView.boxShadow': '0 2px 6px 0 rgba(0, 0, 0, 0.1)',
-              'month.moreView.backgroundColor': 'white',
-              'month.moreView.paddingBottom': '17px',
-              'month.moreViewTitle.height': '44px',
-              'month.moreViewTitle.marginBottom': '12px',
-              'month.moreViewTitle.backgroundColor': 'inherit',
-              'month.moreViewTitle.borderBottom': 'none',
-              'month.moreViewTitle.padding': '12px 17px 0 17px',
-              'month.moreViewList.padding': '0 17px',
-
-              // week header 'dayname'
-              'week.dayname.height': '42px',
-              'week.dayname.borderTop': '1px solid #e5e5e5',
-              'week.dayname.borderBottom': '1px solid #e5e5e5',
-              'week.dayname.borderLeft': 'inherit',
-              'week.dayname.paddingLeft': '0',
-              'week.dayname.backgroundColor': 'inherit',
-              'week.dayname.textAlign': 'left',
-              'week.today.color': '#333',
-              'week.pastDay.color': '#bbb',
-
-              // week vertical panel 'vpanel'
-              'week.vpanelSplitter.border': '1px solid #e5e5e5',
-              'week.vpanelSplitter.height': '3px',
-
-              // week daygrid 'daygrid'
-              'week.daygrid.borderRight': '1px solid #e5e5e5',
-              'week.daygrid.backgroundColor': 'inherit',
-
-              'week.daygridLeft.width': '72px',
-              'week.daygridLeft.backgroundColor': 'inherit',
-              'week.daygridLeft.paddingRight': '8px',
-              'week.daygridLeft.borderRight': '1px solid #e5e5e5',
-
-              'week.today.backgroundColor': 'rgba(81, 92, 230, 0.05)',
-              'week.weekend.backgroundColor': 'inherit',
-
-              // week timegrid 'timegrid'
-              'week.timegridLeft.width': '72px',
-              'week.timegridLeft.backgroundColor': 'inherit',
-              'week.timegridLeft.borderRight': '1px solid #e5e5e5',
-              'week.timegridLeft.fontSize': '11px',
-              'week.timegridLeftTimezoneLabel.height': '40px',
-              'week.timegridLeftAdditionalTimezone.backgroundColor': 'white',
-
-              'week.timegridOneHour.height': '52px',
-              'week.timegridHalfHour.height': '26px',
-              'week.timegridHalfHour.borderBottom': 'none',
-              'week.timegridHorizontalLine.borderBottom': '1px solid #e5e5e5',
-
-              'week.timegrid.paddingRight': '8px',
-              'week.timegrid.borderRight': '1px solid #e5e5e5',
-              'week.timegridSchedule.borderRadius': '2px',
-              'week.timegridSchedule.paddingLeft': '2px',
-
-              'week.currentTime.color': '#515ce6',
-              'week.currentTime.fontSize': '11px',
-              'week.currentTime.fontWeight': 'normal',
-
-              'week.pastTime.color': '#bbb',
-              'week.pastTime.fontWeight': 'normal',
-
-              'week.futureTime.color': '#333',
-              'week.futureTime.fontWeight': 'normal',
-
-              'week.currentTimeLinePast.border': '1px dashed #515ce6',
-              'week.currentTimeLineBullet.backgroundColor': '#515ce6',
-              'week.currentTimeLineToday.border': '1px solid #515ce6',
-              'week.currentTimeLineFuture.border': 'none',
-
-              // week creation guide style
-              'week.creationGuide.color': '#515ce6',
-              'week.creationGuide.fontSize': '11px',
-              'week.creationGuide.fontWeight': 'bold',
-
-              // week daygrid schedule style
-              'week.dayGridSchedule.borderRadius': '2px',
-              'week.dayGridSchedule.height': '24px',
-              'week.dayGridSchedule.marginTop': '2px',
-              'week.dayGridSchedule.marginLeft': '8px',
-              'week.dayGridSchedule.marginRight': '8px'
-            },
-
-            template: {
-              milestone: function(schedule) {
-                return '&lt;span style="color:red;"&gt;&lt;i class="fa fa-flag"&gt;&lt;/i&gt; ' + schedule.title + '&lt;/span&gt;';
-              },
-              milestoneTitle: function() {
-                return 'Milestone';
-              },
-              task: function(schedule) {
-                return '&amp;nbsp;&amp;nbsp;#' + schedule.title;
-              },
-              taskTitle: function() {
-                return '&lt;label&gt;&lt;input type="checkbox" /&gt;Task&lt;/label&gt;';
-              },
-              allday: function(schedule) {
-                return schedule.title + ' &lt;i class="fa fa-refresh"&gt;&lt;/i&gt;';
-              },
-              alldayTitle: function() {
-                return 'All Day';
-              },
-              time: function(schedule) {
-                return schedule.title + ' &lt;i class="fa fa-refresh"&gt;&lt;/i&gt;' + schedule.start;
-              }
-            },
-
-            // Options for daily, weekly view
-            week: {
-              daynames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-              startDayOfWeek: 0,
-              narrowWeekend: true,
-              workweek: false,
-              showTimezoneCollapseButton: false,
-              timezonesCollapsed: false,
-              hourStart: 0,
-              hourEnd: 24,
-            },
-
-            // Options for monthly view.
-            month: {
-              daynames: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-              startDayOfWeek: 0,
-              narrowWeekend: true,
-              visibleWeeksCount: 6,
-              isAlways6Week: true,
-              workweek: false,
-              visibleScheduleCount: 1,
-              moreLayerSize: {},
-              grid: {}, // grid's header and footer information
-              scheduleFilter: null
-            },
-
-            // list of Calendars that can be used to add new schedule
-            /* e.g.
-              [
-                {
-                  id: '1',
-                  name: 'My Calendar',
-                  color: '#ffffff',
-                  bgColor: '#9e5fff',
-                  dragBgColor: '#9e5fff',
-                  borderColor: '#9e5fff'
-                },
-                {
-                  id: '2',
-                  name: 'Company',
-                  color: '#00a9ff',
-                  bgColor: '#00a9ff',
-                  dragBgColor: '#00a9ff',
-                  borderColor: '#00a9ff'
-                },
-              ]
-            */
-            calendars: [],
-
-            // whether use default creation popup or not
             useCreationPopup: false,
+            useDetailPopup: false
+        });
 
-            // whether use default detail popup or not
-            useDetailPopup: false,
+        ////////////////////////////////////////////////////////////////////////////////////////////// CALENDAR EVENT HANDLERS
+        cal.on({
+            'clickSchedule': function(e) {
+                /*const willModify = confirm(`Title: ${e.schedule.title}
+                when: ${yyyymmdd(new Date(e.schedule.start))} 
+                Will you update work?`);
 
-            // timezone options
-            
+                if (willModify) { 
+                    
+                    //e.schedule.title = prompt('Title', e.schedule.title);
+                    //e.schedule.activity = prompt('Activity', e.schedule.activity);
+                    cal.updateSchedule(e.schedule.id, e.schedule.calendarId, e.schedule);
+                }*/
+            },
+            'beforeCreateSchedule': function(e) {
+                let options = { 
+                  backdrop: true, 
+                  keyboard: true, 
+                  focus: true
+                };
 
-            // disable double click
-            disableDblClick: false,
+                let dateInModal = document.getElementById('loadWorkModalDate');
+                dateInModal.innerHTML = moment(e.start._date).format('LL');
+                
+                let loadworkModal = new bootstrap.Modal(document.getElementById('loadWorkModal'), options);
+                loadworkModal.show();
+                e.guide.clearGuideElement();
+                
+            },
+            'beforeUpdateSchedule': function(e) {
+                /*e.schedule.start = e.start;
+                e.schedule.end = e.end;
+                cal.updateSchedule(e.schedule.id, e.schedule.calendarId, e.schedule);*/
+            },
+            'beforeDeleteSchedule': function(e) {
+                /* cal.deleteSchedule(e.schedule.id, e.schedule.calendarId);*/
+            }
+        });
 
-            // disble click
-            disableClick: false,
+        function loadWorkModalSumbit(e) {
+          var schedule = {
+            id: +new Date(),
+            title: "New Activity",
+            isAllDay: true,
+            start: e.start,
+            end: e.end,
+            category:  'allday'
+          };
 
-            // is readonly?
-            isReadOnly: false,
+          cal.createSchedules([schedule]);
+          e.guide.clearGuideElement();
+        }
 
-            // enable usage statistics
-            usageStatistics: true
-          });
-      .col-md-4
-        .whiteborder
-          .form-group.row
-            label.col-md-3.col-form-label.font-weight-bold.text-right(for='date') Date
-            .col-md-7
-              input.form-control(type='date', name='date', id='date', placeholder='date', autofocus, autocomplete='date', required)
-          .form-group.row
-            label.col-md-3.col-form-label.font-weight-bold.text-right(for='activity') Activity
-            .col-md-7
-              select#sel1.form-control(style=' height:40px;', ' width:20px;') 
-                  option(selected='') Seleccione
-                  option(value='1') uno
-                  option(value='2') dos
-                  option(value='3') tres
-          .form-group.row
-            label.col-md-3.col-form-label.font-weight-bold.text-right(for='detail') Detail
-            .col-md-7
-              select#sel1.form-control(style=' height:40px;', ' width:20px;') 
-                  option(selected='') Seleccione
-                  option(value='1') uno
-                  option(value='2') dos
-                  option(value='3') tres  
-          .form-group.row
-            label.col-md-3.col-form-label.font-weight-bold.text-right(for='CC') CC
-            .col-md-7
-              input.form-control(type='cc', name='cc', id='cc', placeholder='cc', autofocus, autocomplete='cc', disabled='')
-          .form-group.row
-            label.col-md-3.col-form-label.font-weight-bold.text-right(for='hours') Hours
-            .col-md-7
-              select#sel1.form-control(style=' height:40px;', ' width:20px;') 
-                  option(selected='') Seleccione
-                  option(value='1') 01:00
-                  option(value='1.5') 01:30
-                  option(value='2') 02:00  
-                  option(value='2.5') 02:30
-                  option(value='3') 03:00  
-                  option(value='3.5') 03:30
-                  option(value='4') 04:00  
-                  option(value='4.5') 04:30
-                  option(value='5') 05:00  
-                  option(value='5.5') 05:30
-                  option(value='6') 06:00  
-                  option(value='6.5') 06:30
-                  option(value='7') 07:00   
-                  option(value='7.5') 07:30
-                  option(value='8') 08:00         
-          .form-group.row
-            label.col-md-3.col-form-label.font-weight-bold.text-right(for='description') Description
-            .col-md-7
-              textarea#description(name='description' rows='4' cols='23')
-          .form-group
-            .offset-md-3.col-md-7.pl-2
-              input.btn.btn-primary(type='submit' value='Submit')
-        br
-        .whiteborder
-          br
-          .form-group
-            .offset-md-3.col-md-7.pl-2
-              input.btn.btn-primary(type='submit' value='Enviar mes')
+        function yyyymmdd(dateIn) {
+            var yyyy = dateIn.getFullYear();
+            var mm = dateIn.getMonth()+1; 
+            var dd  = dateIn.getDate();
+            return String(10000*yyyy + 100*mm + dd);
+        }
+
+        function processLoadwork() {
+          let dateInModal = document.getElementById('loadWorkModalDate');
+          let activityInModal = document.getElementById('selActivity');
+          let detailInModal = document.getElementById('selDetail');
+          
+          console.log("Lahoraes = " + dateInModal.innerText);
+          console.log("Laactividades = " + activityInModal.value);
+
+          var schedule = {
+            id: +new Date(),
+            title: detailInModal[detailInModal.selectedIndex].text,
+            isAllDay: true,
+            start: dateInModal.innerText,
+            end: dateInModal.innerText,
+            category:  'allday'
+          };
+
+          cal.createSchedules([schedule]);
+          e.guide.clearGuideElement();
+
+          //sacar user tambien
+
+          return true;
+        }
