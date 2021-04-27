@@ -9,9 +9,7 @@ html
     title #{title} - Hackathon Starter
     link(rel='shortcut icon', href='/favicon.png')
     link(rel='stylesheet', href='/css/main.css')
-    link(rel='stylesheet', href='/bundles/tuicalendar/tui-calendar.css')
-    link(rel='stylesheet', href='/bundles/tuicalendar/tui-date-picker.min.css')
-    link(rel='stylesheet', href='/bundles/tuicalendar/tui-time-picker.min.css')
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/fullcalendar@5.6.0/main.css')
     block head
 
   body
@@ -27,6 +25,7 @@ html
     script(src='/js/lib/popper.min.js')
     script(src='/js/lib/bootstrap.min.js')
     script(src='/js/main.js')
+    script(src='/js/lib/fc/main.js')
     
     // Google Analytics: change UA-XXXXX-X to be your site's ID
     script.

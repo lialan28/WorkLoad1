@@ -17,6 +17,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
+const cookieParser = require('cookie-parser');
+const csrf = require('csurf');
 
 const upload = multer({ dest: path.join(__dirname, 'uploads') });
 
@@ -42,6 +44,9 @@ const projectController = require('./controllers/project');
  * API keys and Passport configuration.
  */
 const passportConfig = require('./config/passport');
+
+// setup route middlewares
+let csrfProtection = csrf({ cookie: true })
 
 /**
  * Create Express server.
@@ -87,6 +92,7 @@ app.use(session({
     autoReconnect: true,
   })
 }));
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -125,6 +131,7 @@ app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/popper.js/d
 app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js'), { maxAge: 31557600000 }));
 app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery/dist'), { maxAge: 31557600000 }));
 app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/moment/min'), { maxAge: 31557600000 }));
+app.use('/js/lib/fc', express.static(path.join(__dirname, 'node_modules/fullcalendar'), { maxAge: 31557600000 }));
 app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/webfonts'), { maxAge: 31557600000 }));
 
 /**
@@ -153,7 +160,8 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 app.route('/workloads')
   .get(workloadController.getWorkloads,  passportConfig.isAuthenticated);
 app.route('/loadworks')
-  .get(passportConfig.isAuthenticated, loadworkController.getLoadworks);
+  .get(passportConfig.isAuthenticated, lusca({ csrf: true }), loadworkController.getLoadworks)
+  .post(passportConfig.isAuthenticated, lusca({ csrf: true }), loadworkController.postLoadworks);
 app.route('/catalogs')
   .get(passportConfig.isAuthenticated, catalogController.getCatalogs);
 app.route('/project')
