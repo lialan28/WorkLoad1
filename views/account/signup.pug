@@ -12,20 +12,20 @@ block content
     .form-group.row
       label.col-md-4.col-form-label.font-weight-bold.text-right(for='name') Name
       .col-md-5
-        input.form-control(type='name', name='name', id='email', placeholder='Name', autofocus, autocomplete='name', required)
+        input.form-control(type='text', name='name', id='name', placeholder='Name', autofocus, autocomplete='name', required)
     .form-group.row
       label.col-md-4.col-form-label.font-weight-bold.text-right(for='tgi') TGI
       .col-md-5
-        input.form-control(type='tgi', name='tgi', id='tgi', placeholder='TGI', autofocus, autocomplete='tgi', required)
+        input.form-control(type='text', name='tgi', id='tgi', placeholder='TGI', autofocus, autocomplete='tgi', required)
     .form-group.row
       label.col-md-4.col-form-label.font-weight-bold.text-right(for='area') Area
       .col-md-5
-        select#sel1.form-control(style=' height:40px;')  
-          option(selected='') Seleccione 
-          option(value='1') SE
-          option(value='2') DEV
-          option(value='3') IVVQ  
-          option(value='4') ATM  
+        select#sel1.form-control(form='signup-form', name='area' style='height:40px;')
+          option(value='0', selected= true) -- Select --
+          option(value='SE' ) SE
+          option(value='DEV' ) DEV
+          option(value='IVVQ' ) IVVQ  
+          option(value='ATM' ) ATM  
     .form-group.row
       label.col-md-4.col-form-label.font-weight-bold.text-right(for='password') Password
       .col-md-5

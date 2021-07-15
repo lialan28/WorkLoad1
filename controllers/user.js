@@ -124,6 +124,16 @@ exports.getSignup = (req, res) => {
  * Create a new local account.
  */
 exports.postSignup = (req, res, next) => {
+  console.log("llegue 1");
+
+  console.log("---------------------------------------");
+  console.log("email: " + req.body.email);
+  console.log("name: " + req.body.name);
+  console.log("tgi: " + req.body.tgi);
+  console.log("area: " + req.body.area);
+  console.log("password: " + req.body.password);
+  console.log("---------------------------------------");
+
   const validationErrors = [];
   if (!validator.isEmail(req.body.email)) validationErrors.push({ msg: 'Please enter a valid email address.' });
 
@@ -142,6 +152,8 @@ exports.postSignup = (req, res, next) => {
   }
   req.body.email = validator.normalizeEmail(req.body.email, { gmail_remove_dots: false });
 
+  console.log("llegue 2");
+
   const user = new User({
     email: req.body.email,
     password: req.body.password,
@@ -152,13 +164,17 @@ exports.postSignup = (req, res, next) => {
     } 
   });
 
+  console.log("llegue 3");
+
   User.findOne({ email: req.body.email }, (err, existingUser) => {
+    console.log("llegue 4");
     if (err) { return next(err); }
     if (existingUser) {
       req.flash('errors', { msg: 'Account with that email address already exists.' });
       return res.redirect('/signup');
     }
     user.save((err) => {
+      console.log("llegue 5");
       if (err) { return next(err); }
       req.logIn(user, (err) => {
         if (err) {

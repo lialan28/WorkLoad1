@@ -45,9 +45,6 @@ const projectController = require('./controllers/project');
  */
 const passportConfig = require('./config/passport');
 
-// setup route middlewares
-let csrfProtection = csrf({ cookie: true })
-
 /**
  * Create Express server.
  */

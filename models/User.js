@@ -27,7 +27,8 @@ const userSchema = new mongoose.Schema({
     tgi: String,
     area: String,
     picture: String
-  }
+  },
+  loadworkData: [mongoose.Schema.Types.Mixed]
 }, { timestamps: true });
 
 /**

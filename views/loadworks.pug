@@ -25,7 +25,8 @@ block content
                   span.sr-only Close
               .modal-body
                 .form-group.row
-                  input(id="csrfToken", type='hidden', name='_csrf', value=_csrf)
+                  input(id="csrfToken", type='hidden', name='_csrf', value = _csrf)
+                  input(id="tgi" type='hidden', value = user.profile.tgi)
                   label.col-md-3.col-form-label.font-weight-bold.text-right User
                   .col-md-7
                     label(id="userName")= user.profile.name
@@ -90,11 +91,14 @@ block content
       
       script.
         let calendar;
-
+        let savedData = !{JSON.stringify(user.loadworkData)};
+        console.log(savedData);
+    
         document.addEventListener('DOMContentLoaded', function() {
           let calendarEl = document.getElementById('calendar');
 
           calendar = new FullCalendar.Calendar(calendarEl, {
+            events: savedData,
             initialView: 'dayGridMonth',
             businessHours: {
               daysOfWeek: [ 1, 2, 3, 4, 5 ], 
@@ -105,7 +109,7 @@ block content
               
               if (dayOfWeek != 0  && dayOfWeek != 6) { 
                 let options = { 
-                  backdrop: true, 
+                  backdrop: true,
                   keyboard: true, 
                   focus: true
                 };
@@ -132,7 +136,8 @@ block content
           let detailInModal = document.getElementById('selDetail');
           let ccInModal = document.getElementById('');
           let userNameInModal = document.getElementById('userName');
-          let userTgiInModal = document.getElementById('userTgi');
+          let timeInModal = document.getElementById('selFromHour');
+          
 
           let newEvent = {
             title: detailInModal[detailInModal.selectedIndex].text,
@@ -142,9 +147,9 @@ block content
             exProp_activity: activityInModal[activityInModal.selectedIndex].text,
             exProp_detail: detailInModal[detailInModal.selectedIndex].text,
             exProp_cc: "cc",
-            exProp_time: 1,
+            exProp_time: timeInModal[timeInModal.selectedIndex].text,
             exProp_commercial: "test",
-            exProp_description: "Description Test"
+            exProp_description: "Description Test",
           };
 
           calendar.addEvent(newEvent);
@@ -154,13 +159,11 @@ block content
           let allEvents = calendar.getEvents();
           let dbObjectArray = [];
 
-          //console.log(allEvents);
-
           for (let x in allEvents) {
             let dbObject = {
               title: allEvents[x]._def.title,
-              start: allEvents[x]._instance.range.start,
-              end: allEvents[x]._instance.range.end,
+              start: allEvents[x]._instance.range.end,
+              //end: allEvents[x]._instance.range.end,
 
               exProp_activity: allEvents[x]._def.extendedProps.exProp_activity,
               exProp_detail: allEvents[x]._def.extendedProps.exProp_detail,
@@ -175,12 +178,14 @@ block content
           }
 
           let token = document.getElementById("csrfToken");
+          let userTgi = document.getElementById('tgi');
 
           let xhr = new XMLHttpRequest();
           xhr.open("POST", "https://workload1-2.lialan.repl.co/loadworks", true);
           xhr.setRequestHeader('Content-Type', 'application/json');
           xhr.setRequestHeader('X-CSRF-Token', token.value);
           xhr.send(JSON.stringify({
+            tgi: userTgi.value,
             data: dbObjectArray
           }));
         }
